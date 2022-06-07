@@ -170,7 +170,7 @@ cp -r install/lib/hand_gesture_detection/config/ .
 # 启动手势识别pkg
 ./install/lib/hand_gesture_detection/hand_gesture_detection --log-level error &
 
-# 启动手势交互pkg
+# 启动人体跟随pkg
 ./install/lib/body_tracking/body_tracking --ros-args -p activate_wakeup_gesture:=1 -p img_width:=960 -p img_height:=544 -p track_serial_lost_num_thr:=100 -p move_step:=0.1 -p rotate_step:=0.174 -p activate_robot_move_thr:=5
 ```
 

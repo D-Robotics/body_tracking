@@ -982,6 +982,7 @@ void TrackingManager::TrackingWithoutNavStrategy(
   last_frame_done_ = false;
 
   if (TrackingStatus::INITING == track_info_.tracking_sta) {
+    CancelMove();
     last_frame_done_ = true;
     SetLed(1, 1, 1);
     return;

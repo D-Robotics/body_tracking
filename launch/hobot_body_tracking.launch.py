@@ -78,12 +78,12 @@ def generate_launch_description():
             executable='body_tracking',
             output='screen',
             parameters=[
-                {"activate_wakeup_gesture": 1},
+                {"activate_wakeup_gesture": 0},
                 {"img_width": 960},
                 {"img_height": 544},
-                {"track_serial_lost_num_thr": 100},
-                {"move_step": 0.1},
-                {"rotate_step": 0.174},
+                {"track_serial_lost_num_thr": 30},
+                {"move_step": 0.5},
+                {"rotate_step": 0.5},
                 {"activate_robot_move_thr": 5}
             ],
             arguments=['--ros-args', '--log-level', 'info']
