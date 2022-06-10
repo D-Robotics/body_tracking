@@ -1,8 +1,22 @@
+import os
+
 from launch import LaunchDescription
 from launch_ros.actions import Node
- 
+
+from launch.actions import IncludeLaunchDescription
+from launch.launch_description_sources import PythonLaunchDescriptionSource
+from ament_index_python import get_package_share_directory
+
 def generate_launch_description():
+    web_service_launch_include = IncludeLaunchDescription(
+        PythonLaunchDescriptionSource(
+            os.path.join(
+                get_package_share_directory('websocket'),
+                'launch/hobot_websocket_service.launch.py'))
+    )
+
     return LaunchDescription([
+        web_service_launch_include,
         # 启动图片发布pkg
         Node(
             package='mipi_cam',
