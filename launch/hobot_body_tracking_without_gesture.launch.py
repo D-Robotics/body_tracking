@@ -83,7 +83,7 @@ def generate_launch_description():
             ],
             arguments=['--ros-args', '--log-level', 'error']
         ),
-        # 启动手势交互pkg
+        # 启动人体跟随pkg
         Node(
             package='body_tracking',
             executable='body_tracking',
