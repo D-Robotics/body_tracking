@@ -82,10 +82,10 @@ install(DIRECTORY
 
 install(FILES
   ${PROJECT_SOURCE_DIR}/README.md
-  DESTINATION .)
+  DESTINATION lib/${PROJECT_NAME})
 
 install(DIRECTORY
   ${PROJECT_SOURCE_DIR}/images/
-  DESTINATION ./images)
+  DESTINATION lib/${PROJECT_NAME}/images)
 
 ament_package()
