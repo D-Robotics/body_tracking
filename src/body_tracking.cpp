@@ -62,15 +62,12 @@ TrackingManager::TrackingManager() {
       }
     });
   }
-
-  SetLed(1, 0, 0);
 }
 
 TrackingManager::~TrackingManager() {}
 
 void TrackingManager::Release() {
   RCLCPP_WARN(rclcpp::get_logger("TrackingManager"), "TrackingManager release");
-  SetLed(0, 0, 0);
   start_ = false;
 
   if (smart_process_task_ && smart_process_task_->joinable()) {
@@ -990,7 +987,6 @@ void TrackingManager::TrackingWithoutNavStrategy(
   if (TrackingStatus::INITING == track_info_.tracking_sta) {
     CancelMove();
     last_frame_done_ = true;
-    SetLed(1, 1, 1);
     return;
   }
 
@@ -1019,7 +1015,6 @@ void TrackingManager::TrackingWithoutNavStrategy(
     CancelMove();
     track_info_.tracking_sta = TrackingStatus::INITING;
     last_frame_done_ = true;
-    SetLed(0, 0, 1);
     return;
   }
 
@@ -1033,11 +1028,8 @@ void TrackingManager::TrackingWithoutNavStrategy(
     CancelMove();
     last_frame_done_ = true;
 
-    SetLed(0, 0, 1);
     return;
   }
-
-  SetLed(0, 1, 0);
 
   // 2. cal the angle of robot and track
   UpdateTrackAngle();
@@ -1102,30 +1094,3 @@ std::vector<std::shared_ptr<rclcpp::Node>> TrackingManager::GetNodes() {
 }
 
 const TrackCfg &TrackingManager::GetTrackCfg() const { return track_cfg_; }
-
-void TrackingManager::SetLed(int r, int g, int b) {
-  {
-    std::string set_key{std::to_string(r) + " " + std::to_string(g) + " " +
-                        std::to_string(b)};
-    std::lock_guard<std::mutex> lg(hw_gpio_cfg_.mtx);
-    if (hw_gpio_cfg_.last_set == set_key) {
-      return;
-    } else {
-      hw_gpio_cfg_.last_set = set_key;
-    }
-  }
-
-  std::stringstream ss;
-  ss << "set led r: " << r << ", g: " << g << ", b: " << b << "\n";
-  std::string cmd = "python3 " + hw_gpio_cfg_.script_file_path;
-  std::vector<std::string> cmds{
-      cmd + " " + std::to_string(hw_gpio_cfg_.pin_r) + " " + std::to_string(r),
-      cmd + " " + std::to_string(hw_gpio_cfg_.pin_g) + " " + std::to_string(g),
-      cmd + " " + std::to_string(hw_gpio_cfg_.pin_b) + " " + std::to_string(b)};
-
-  for (const auto &cmd : cmds) {
-    ss << cmd << "\n";
-    system(cmd.data());
-  }
-  RCLCPP_WARN(rclcpp::get_logger("TrackingManager"), "%s", ss.str().data());
-}

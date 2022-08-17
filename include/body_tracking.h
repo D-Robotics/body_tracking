@@ -71,9 +71,6 @@ class TrackingManager {
   // 只使用视觉检测结果数据，判断是否需要激活跟随
   bool TrackingSwitchWithVision();
 
-  // 设置gpio led灯，1点亮，0关闭
-  void SetLed(int r, int g, int b);
-
   std::mutex robot_strategy_mtx_;
   // 如果上一帧智能数据的策略未处理完，当前智能数据不处理
   std::atomic_bool last_frame_done_;
@@ -83,7 +80,6 @@ class TrackingManager {
 
   TrackInfo track_info_;
   TrackCfg track_cfg_;
-  HwGpioCfg hw_gpio_cfg_;
 
   bool start_ = false;
 
