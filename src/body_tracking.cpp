@@ -287,6 +287,7 @@ void TrackingManager::CancelMove() {
 
   last_cmdvel_is_cancel_ = true;
   last_cmdvel_type_ = -1;
+  last_move_step_ratio_ = 1.0;
 }
 
 bool TrackingManager::TrackingSwitchWithVision() {
@@ -344,6 +345,12 @@ bool TrackingManager::TrackingSwitchWithVision() {
     }
   }
 
+  if (move_step_ratio > (last_move_step_ratio_ + 0.5)) {
+    // 限制速度，避免突然速度
+    move_step_ratio = (last_move_step_ratio_ + 0.5);
+    last_move_step_ratio_ = move_step_ratio;
+  }
+
   track_info_.move_step = move_step_ratio * track_cfg_.move_step;
 
   // 只根据body rect宽度判断是否需要move 20220119
@@ -374,117 +381,6 @@ bool TrackingManager::TrackingSwitchWithVision() {
   return false;
 }
 
-void TrackingManager::UpdateSmart(
-    const ai_msgs::msg::PerceptionTargets::ConstSharedPtr &msg) {
-  uint64_t frame_ts = (msg->header.stamp.sec % 1000) * 1000 +
-                      msg->header.stamp.nanosec / 1000 / 1000;
-
-  track_info_.frame_ts_sec = msg->header.stamp.sec;
-  track_info_.frame_ts_nanosec = msg->header.stamp.nanosec;
-
-  RCLCPP_DEBUG(rclcpp::get_logger("TrackingManager"),
-               "update smart frame_ts %llu",
-               frame_ts);
-
-  // update track info
-  // if the track is lost, reset track info
-  if (TrackingStatus::TRACKING == track_info_.tracking_sta) {
-    // update status
-    // find track
-    bool find_track = false;
-    std::vector<int> present_rect;
-    int gesture = 0;
-    for (const auto &target : msg->targets) {
-      if (track_cfg_.track_body) {
-        // tracking body
-        bool tar_has_body = false;
-        std::vector<int> body_rect;
-        for (const auto &roi : target.rois) {
-          if ("body" == roi.type) {
-            tar_has_body = true;
-            body_rect.push_back(roi.rect.x_offset);
-            body_rect.push_back(roi.rect.y_offset);
-            body_rect.push_back(roi.rect.x_offset + roi.rect.width);
-            body_rect.push_back(roi.rect.y_offset + roi.rect.height);
-            break;
-          }
-        }
-        if (!tar_has_body) continue;
-        if (target.track_id == track_info_.track_id) {
-          find_track = true;
-          present_rect = body_rect;
-          break;
-        }
-      }
-    }
-
-    if (find_track) {
-      if (1 == track_cfg_.activate_wakeup_gesture) {
-        if (track_cfg_.track_body) {
-          // tracking body
-          // check if has cancel gesture
-          for (const auto &target : msg->targets) {
-            bool tar_has_hand = false;
-            std::vector<int> hand_rect;
-            for (const auto &roi : target.rois) {
-              if ("hand" == roi.type) {
-                tar_has_hand = true;
-                hand_rect.push_back(roi.rect.x_offset);
-                hand_rect.push_back(roi.rect.y_offset);
-                hand_rect.push_back(roi.rect.x_offset + roi.rect.width);
-                hand_rect.push_back(roi.rect.y_offset + roi.rect.height);
-                break;
-              }
-            }
-
-            if (!tar_has_hand) continue;
-            int tar_gesture = -1;
-            for (const auto &attr : target.attributes) {
-              RCLCPP_INFO(rclcpp::get_logger("TrackingManager"),
-                          "track_id: %d, attr type: %s, val: %d",
-                          target.track_id,
-                          attr.type.c_str(),
-                          attr.value);
-              if ("gesture" == attr.type) {
-                tar_gesture = attr.value;
-              }
-            }
-
-            if (tar_gesture != track_cfg_.cancel_tracking_gesture_ ||
-                present_rect.empty())
-              continue;
-            const auto &present_hand_rect = hand_rect;
-            if (present_hand_rect[0] >= present_rect[0] &&
-                present_hand_rect[0] <= present_rect[2] &&
-                present_hand_rect[2] >= present_rect[0] &&
-                present_hand_rect[2] <= present_rect[2] &&
-                present_hand_rect[1] >= present_rect[1] &&
-                present_hand_rect[1] <= present_rect[3] &&
-                present_hand_rect[3] >= present_rect[1] &&
-                present_hand_rect[3] <= present_rect[3]) {
-              // match the body box
-              RCLCPP_WARN(
-                  rclcpp::get_logger("TrackingManager"),
-                  "frame_ts %llu, track id: %d recved cancel gesture: %d",
-                  frame_ts,
-                  track_info_.track_id,
-                  tar_gesture);
-              gesture = tar_gesture;
-              track_info_.gesture = gesture;
-              break;
-            }
-          }
-        }
-      }
-
-      // update rect
-      track_info_.present_rect = present_rect;
-      track_info_.frame_ts = frame_ts;
-      track_info_.gesture = gesture;
-    }
-  }
-}
-
 void TrackingManager::ProcessSmart(
     const ai_msgs::msg::PerceptionTargets::ConstSharedPtr &msg) {
   if (!msg || !rclcpp::ok()) {
@@ -508,6 +404,8 @@ void TrackingManager::ProcessSmart(
     // find track
     bool find_track = false;
     std::vector<int> present_rect;
+    int body_kps_5_y = -1;
+    int body_kps_6_y = -1;
     int gesture = 0;
     for (const auto &target : msg->targets) {
       if (track_cfg_.track_body) {
@@ -529,6 +427,14 @@ void TrackingManager::ProcessSmart(
         if (target.track_id == track_info_.track_id) {
           find_track = true;
           present_rect = body_rect;
+          // 获取target对应的kps，用于误触发策略
+          for (const auto &point : target.points) {
+            if ("body_kps" == point.type) {
+              body_kps_5_y = point.point.at(5).y;
+              body_kps_6_y = point.point.at(6).y;
+              break;
+            }
+          }
           break;
         }
       } else {
@@ -614,17 +520,32 @@ void TrackingManager::ProcessSmart(
                 present_hand_rect[1] <= present_rect[3] &&
                 present_hand_rect[3] >= present_rect[1] &&
                 present_hand_rect[3] <= present_rect[3]) {
-              // match the body box
-              RCLCPP_WARN(
-                  rclcpp::get_logger("TrackingManager"),
-                  "frame_ts %llu, track id: %d recved cancel gesture: %d",
-                  frame_ts,
-                  track_info_.track_id,
-                  tar_gesture);
-              track_info_.tracking_sta = TrackingStatus::INITING;
-              gesture = tar_gesture;
-              track_info_.gesture = gesture;
-              break;
+              // 检查hand rect的中心店是否在人体肩部（人体骨骼关键点的index5和6）以上，避免误触发
+              bool cancel = false;
+              if (body_kps_5_y < 0 || body_kps_6_y < 0) {
+                // match the body box
+                cancel = true;
+              } else {
+                int hand_center_y = (present_hand_rect[1] + present_hand_rect[3]) / 2;
+                if (hand_center_y < body_kps_5_y && hand_center_y < body_kps_6_y) {
+                  cancel = true;
+                } else {
+                  cancel = false;
+                }
+              }
+              if (cancel) {
+                // match the body box
+                RCLCPP_WARN(
+                    rclcpp::get_logger("TrackingManager"),
+                    "frame_ts %llu, track id: %d recved cancel gesture: %d",
+                    frame_ts,
+                    track_info_.track_id,
+                    tar_gesture);
+                track_info_.tracking_sta = TrackingStatus::INITING;
+                gesture = tar_gesture;
+                track_info_.gesture = gesture;
+                break;
+              }
             }
           }
         } else {
@@ -771,11 +692,35 @@ void TrackingManager::ProcessSmart(
                 present_hand_rect[1] <= rect[3] &&
                 present_hand_rect[3] >= rect[1] &&
                 present_hand_rect[3] <= rect[3]) {
-              // match the body box
-              has_body = true;
-              body_id = target.track_id;
-              present_body_rect = rect;
-              break;
+
+              // 检查hand rect的中心店是否在人体肩部（人体骨骼关键点的index5和6）以上，避免误触发
+              bool tar_has_body_kps = false;
+              int body_kps_5_y = -1;
+              int body_kps_6_y = -1;
+              for (const auto &point : target.points) {
+                if ("body_kps" == point.type) {
+                  tar_has_body_kps = true;
+                  body_kps_5_y = point.point.at(5).y;
+                  body_kps_6_y = point.point.at(6).y;
+                  break;
+                }
+              }
+              if (!tar_has_body_kps) {
+                // match the body box
+                has_body = true;
+              } else {
+                int hand_center_y = (present_hand_rect[1] + present_hand_rect[3]) / 2;
+                if (hand_center_y < body_kps_5_y && hand_center_y < body_kps_6_y) {
+                  has_body = true;
+                } else {
+                  has_body = false;
+                }
+              }
+              if (has_body) {
+                body_id = target.track_id;
+                present_body_rect = rect;
+                break;
+              }
             }
           }
 
