@@ -144,7 +144,7 @@ cp -r install/lib/mono2d_body_detection/config/ .
 cp -r install/lib/hand_lmk_detection/config/ .
 cp -r install/lib/hand_gesture_detection/config/ .
 
-ros2 launch install/share/body_tracking/launch/hobot_body_tracking.launch.py
+ros2 launch install/share/body_tracking/launch/body_tracking.launch.py
 ```
 
 ### **Linux**
