@@ -52,7 +52,7 @@
 启动机器人后，通过终端或者VNC连接机器人，点击本页面右上方的“一键部署”按钮，复制如下命令在RDK的系统上运行，完成人体跟随相关Node的安装。
 
 ```bash
-sudo apt install -y tros-test-body-tracking
+sudo apt install -y tros-body-tracking
 ```
 
 
@@ -109,7 +109,7 @@ ros2 launch body_tracking body_tracking_without_gesture.launch.py
 2. 在PC端的Ubuntu系统中安装Gazebo及机器人模型
 
 ```bash
-sudo apt-get install ros-foxy-gazebo-*
+sudo apt install ros-foxy-gazebo-*
 sudo apt install ros-foxy-turtlebot3
 sudo apt install ros-foxy-turtlebot3-simulations
 ```
