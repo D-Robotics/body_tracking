@@ -45,7 +45,7 @@ def generate_launch_description():
         PythonLaunchDescriptionSource(
             os.path.join(
                 get_package_share_directory('mono2d_body_detection'),
-                'launch/mono2d_body_detection.launch.py')),
+                'launch/mono2d_body_detection_without_input_node.launch.py')),
         launch_arguments={
             'smart_topic': '/hobot_mono2d_body_detection',
             'mono2d_body_pub_topic': '/hobot_mono2d_body_detection'
