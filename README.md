@@ -1,21 +1,13 @@
 # 功能介绍
 
-通过摄像头进行目标人体检测与跟踪，以此生成运动控制指令实现机器人自动跟随目标人运动。
+通过视觉进行人体目标检测与跟踪，并生成运动控制指令控制机器人自动跟随目标运动。支持机器人实物和Gazebo仿真两种体验方式。
 
 
+# 机器人实物
 
-# 准备工作
+## 物料清单
 
-本Node支持在实物机器人或Gazebo仿真环境中使用，在使用前请确认具备以下条件：
-
-## 实物机器人
-
-本Node在实物机器人上运行时，需要机器人具备以下基本条件：
-
-- 机器人具备运动底盘、相机及RDK套件，硬件已经连接并测试完毕；
-- 已有ROS底层驱动，机器人可接收“/cmd_vel”指令运动
-
-机器人示例：
+以下机器人均已适配RDK X3
 
 | 机器人名称          | 生产厂家 | 参考链接                                                     |
 | :------------------ | -------- | ------------------------------------------------------------ |
@@ -24,52 +16,37 @@
 | 履带智能车          | 微雪电子 | [点击跳转](https://detail.tmall.com/item.htm?abbucket=9&id=696078152772&rn=4d81bea40d392509d4a5153fb2c65a35&spm=a1z10.5-b-s.w4011-22714387486.159.12d33742lJtqRk) |
 | RDK X3 Robot        | 亚博智能 | [点击跳转](https://detail.tmall.com/item.htm?id=726857243156&scene=taobao_shop&spm=a1z10.1-b-s.w5003-22651379998.21.421044e12Yqrjm) |
 
+## 使用方法
 
+### 准备工作
 
-## Gazebo仿真环境
+1. 机器人具备运动底盘、相机及RDK套件，硬件已经连接并测试完毕；
+2. 已有ROS底层驱动，机器人可接收“/cmd_vel”指令运动，并根据指令正确运动。
 
-本Node在Gazebo仿真环境中运行时，需要具备以下基本条件：
+### 机器人组装
+以下操作过程以OriginBot为例，满足条件的其他机器人使用方法类似。参考机器人官网的[使用指引](https://www.originbot.org/guide/quick_guide/)，完成机器人的硬件组装、镜像烧写及示例运行，确认机器人的基础功能可以顺利运行。
 
-- 开发者有RDK套件实物，及配套的相机
-- PC电脑端已经完成ROS Gazebo及Turtlebot机器人相关功能包安装
+### 安装功能包
+**1.参考[OriginBot说明](https://github.com/nodehubs/originbot_minimal/blob/develop/README.md)，完成Originbit基础功能安装**
 
-
-
-# 使用方法
-
-## 实物机器人
-
-> 以下操作过程以OriginBot为例，满足条件的其他机器人使用方法类似
-
-### 搭建机器人
-
-参考机器人官网的[使用指引](https://www.originbot.org/guide/quick_guide/)，完成机器人的硬件组装、镜像烧写及示例运行，确认机器人的基础功能可以顺利运行。
-
-
-
-### 安装Node
+**2.安装人体跟随功能包**
 
 启动机器人后，通过终端或者VNC连接机器人，点击本页面右上方的“一键部署”按钮，复制如下命令在RDK的系统上运行，完成人体跟随相关Node的安装。
 
 ```bash
+sudo apt update
 sudo apt install -y tros-test-body-tracking
 ```
 
-
-
-### 运行Node
-
-安装完成后，即可参考以下步骤运行该功能：
+### 运行人体跟随功能
 
 **1.启动机器人底盘**
 
 启动机器人，如OriginBot的启动命令如下：
 
 ```bash
-ros2 launch originbot_bringup originbot.launch.py
+ros2 launch originbot_base robot.launch.py 
 ```
-
-
 
 **2.启动人体跟随**
 
@@ -98,39 +75,36 @@ ros2 launch body_tracking body_tracking_without_gesture.launch.py
 
 ![ezgif-5-5c246b7347](images/ezgif-5-5c246b7347.gif)
 
+# Gazebo仿真
 
+Gazebo仿真适用于持有RDK X3但没有机器人实物的开发者体验人体跟随功能。
 
-## Gazebo仿真环境
+## 物料清单
 
-### 安装仿真环境
+| 机器人名称          | 生产厂家 | 参考链接                                                     |
+| :------------------ | -------- | ------------------------------------------------------------ |
+| RDK X3             | 多厂家 | [点击跳转](https://developer.horizon.ai/sunrise) |
 
-1. 参考[ROS2安装说明](https://docs.ros.org/en/humble/index.html)，在PC端的Ubuntu系统中安装ROS2
+## 使用方法
 
-2. 在PC端的Ubuntu系统中安装Gazebo及机器人模型
+### 准备工作
+
+在体验之前，需要具备以下基本条件：
+
+- 开发者有RDK套件实物，及配套的相机
+- PC电脑端已经完成ROS Gazebo及Turtlebot机器人相关功能包安装
+- 确保使用的PC与RDK处于统一网络中
+
+### 安装功能包
+
+启动RDK X3后，通过终端或者VNC连接机器人，点击[NodeHub](http://it-dev.horizon.ai/nodehubDetail/167289845913411076)右上方的“一键部署”按钮，复制如下命令在RDK的系统上运行，完成人体跟随相关Node的安装。
 
 ```bash
-sudo apt-get install ros-foxy-gazebo-*
-sudo apt install ros-foxy-turtlebot3
-sudo apt install ros-foxy-turtlebot3-simulations
+sudo apt update
+sudo apt install -y tros-test-body-tracking
 ```
 
-3. 确保使用的PC与RDK处于统一网络中
-
-
-
-### 安装Node
-
-启动RDK套件后，通过终端或者VNC连接RDK，点击本页面右上方的“一键部署”按钮，复制如下命令在RDK的系统上运行，完成人体跟随相关Node的安装。
-
-```bash
-sudo apt install -y tros-body-tracking
-```
-
-
-
-### 运行Node
-
-安装完成后，即可参考以下步骤运行该功能：
+### 运行人体跟随功能
 
 **1.启动仿真环境及机器人**
 
@@ -175,6 +149,8 @@ ros2 launch body_tracking body_tracking_without_gesture.launch.py
 打开PC端的浏览器，访问RDK的IP地址，即可看到视觉识别的实时效果：
 
 ![webservice](images/webservice.jpeg)
+
+
 
 # 进阶功能
 
