@@ -45,6 +45,7 @@ sudo apt install -y tros-body-tracking
 启动机器人，如OriginBot的启动命令如下：
 
 ```bash
+source /opt/tros/setup.bash
 ros2 launch originbot_base robot.launch.py 
 ```
 
