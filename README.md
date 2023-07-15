@@ -1,6 +1,6 @@
 # 功能介绍
 
-通过视觉进行人体目标检测与跟踪，并生成运动控制指令控制机器人自动跟随目标运动。支持机器人实物和Gazebo仿真两种体验方式。
+通过视觉进行人体目标检测与跟踪，并生成运动控制指令控制机器人自动跟随目标运动。该功能支持机器人实物和Gazebo仿真两种体验方式。
 
 
 # 机器人实物
@@ -35,7 +35,7 @@
 
 ```bash
 sudo apt update
-sudo apt install -y tros-test-body-tracking
+sudo apt install -y tros-body-tracking
 ```
 
 ### 运行人体跟随功能
@@ -45,6 +45,7 @@ sudo apt install -y tros-test-body-tracking
 启动机器人，如OriginBot的启动命令如下：
 
 ```bash
+source /opt/tros/setup.bash
 ros2 launch originbot_base robot.launch.py 
 ```
 
