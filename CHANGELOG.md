@@ -1,5 +1,10 @@
 # Changelog for package body_tracking
 
+tros_2.0.2 (2023-07-18)
+------------------
+1. 更新启动脚本中的linear_velocity和angular_velocity配置参数。
+
+
 tros_2.0.1 (2023-07-18)
 ------------------
 1. 更新body_tracking.launch.py启动脚本，开启手势唤醒功能。
