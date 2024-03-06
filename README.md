@@ -54,7 +54,7 @@ ros2 launch originbot_base robot.launch.py
 启动一个新的终端，通过如下指令启动人体跟随功能：
 ```bash
 # 拷贝人体跟随的模型
-cp -r /opt/tros/lib/mono2d_body_detection/config/ .
+cp -r /opt/tros/${TROS_DISTRO}/lib/mono2d_body_detection/config/ .
 
 #启动Node
 source /opt/tros/setup.bash
@@ -129,7 +129,7 @@ ros2 launch turtlebot3_gazebo empty_world.launch.py
 
 ```bash
 # 拷贝人体跟随的模型
-cp -r /opt/tros/lib/mono2d_body_detection/config/ .
+cp -r /opt/tros/${TROS_DISTRO}/lib/mono2d_body_detection/config/ .
 
 #启动Node
 source /opt/tros/setup.bash
@@ -163,9 +163,9 @@ ros2 launch body_tracking body_tracking_without_gesture.launch.py
 
 ```bash
 # 拷贝人体跟随的模型
-cp -r /opt/tros/lib/mono2d_body_detection/config/ .
-cp -r /opt/tros/lib/hand_lmk_detection/config/ .
-cp -r /opt/tros/lib/hand_gesture_detection/config/ .
+cp -r /opt/tros/${TROS_DISTRO}/lib/mono2d_body_detection/config/ .
+cp -r /opt/tros/${TROS_DISTRO}/lib/hand_lmk_detection/config/ .
+cp -r /opt/tros/${TROS_DISTRO}/lib/hand_gesture_detection/config/ .
 
 #启动Node
 source /opt/tros/setup.bash
