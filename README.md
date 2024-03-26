@@ -49,7 +49,9 @@ Start the robot, for example, the startup command for OriginBot is as follows:
 ```bash
 source /opt/tros/setup.bash
 ros2 launch originbot_base robot.launch.py 
-```**2. Start Human Body Tracking**
+```
+
+**2. Start Human Body Tracking**
 
 Start a new terminal and initiate human body tracking function with the following commands:
 ```bash
@@ -186,7 +188,9 @@ When making a wake-up or cancellation gesture, raise your hand (hand above the s
 
 ## Topics
 
-The results of human body recognition and gesture wake-up are published through the [hobot_msgs/ai_msgs/msg/PerceptionTargets](https://github.com/HorizonRDK/hobot_msgs/blob/develop/ai_msgs/msg/Target.msg) topic. The detailed definition of this topic is as follows:```
+The results of human body recognition and gesture wake-up are published through the [hobot_msgs/ai_msgs/msg/PerceptionTargets](https://github.com/HorizonRDK/hobot_msgs/blob/develop/ai_msgs/msg/Target.msg) topic. The detailed definition of this topic is as follows:
+
+```
 # Header of the message
 std_msgs/Header header
 
@@ -236,7 +240,8 @@ Target[] disappeared_targets
 This feature consists of camera image capturing, human body detection and tracking, human following strategy, image encoding and decoding, WEB display end, etc., as shown in the following flowchart:
 
 ![20220922180336](images/20220922180336.png)
-```Upon detecting a human body in the field of view, calculate the angle between the center of the human body detection box and the robot. When the angle exceeds the threshold value (activate_robot_rotate_thr), control the robot to rotate to keep the followed person directly in front of the robot. When the followed person disappears, stop the robot's movement and search for a new person to follow. When the followed person is directly in front of the robot, determine if the top boundary of the human body detection box (the top coordinate of the detection box) exceeds the threshold value (activate_robot_move_thr), then control the robot's movement.
+
+Upon detecting a human body in the field of view, calculate the angle between the center of the human body detection box and the robot. When the angle exceeds the threshold value (activate_robot_rotate_thr), control the robot to rotate to keep the followed person directly in front of the robot. When the followed person disappears, stop the robot's movement and search for a new person to follow. When the followed person is directly in front of the robot, determine if the top boundary of the human body detection box (the top coordinate of the detection box) exceeds the threshold value (activate_robot_move_thr), then control the robot's movement.
 
 > For a detailed implementation explanation, please refer to the "References".
 
