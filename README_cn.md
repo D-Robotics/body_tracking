@@ -44,7 +44,6 @@ sudo apt install -y tros-body-tracking
 tros humble 版本
 ```bash
 sudo apt update
-sudo apt install -y ros-humble-ros-base
 sudo apt install -y tros-humble-body-tracking
 ```
 
@@ -143,7 +142,6 @@ sudo apt install -y tros-test-body-tracking
 tros humble 版本
 ```bash
 sudo apt update
-sudo apt install -y ros-humble-ros-base
 sudo apt install -y tros-humble-test-body-tracking
 ```
 
