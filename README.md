@@ -35,9 +35,16 @@ The following operating process is based on OriginBot, and the usage method for 
 
 After starting the robot, connect to the robot through terminal or VNC, click the "One-Click Deployment" button on this page's upper right corner, copy and run the following command on RDK system to install the human tracking-related nodes.
 
+tros foxy:
 ```bash
 sudo apt update
 sudo apt install -y tros-body-tracking
+```
+
+tros humble:
+```bash
+sudo apt update
+sudo apt install -y tros-humble-body-tracking
 ```
 
 ### Run human tracking function
@@ -46,14 +53,23 @@ sudo apt install -y tros-body-tracking
 
 Start the robot, for example, the startup command for OriginBot is as follows:
 
+tros foxy:
 ```bash
 source /opt/tros/setup.bash
 ros2 launch originbot_base robot.launch.py 
 ```
 
+tros humble:
+```bash
+source /opt/tros/humble/setup.bash
+ros2 launch originbot_base robot.launch.py
+```
+
 **2. Start Human Body Tracking**
 
 Start a new terminal and initiate human body tracking function with the following commands:
+
+tros foxy:
 ```bash
 # Copy the model of body tracking
 cp -r /opt/tros/${TROS_DISTRO}/lib/mono2d_body_detection/config/ .
@@ -66,6 +82,21 @@ export CAM_TYPE=mipi
 
 # Run human body tracking
 ros2 launch body_tracking body_tracking_without_gesture.launch.py 
+```
+
+tros humble:
+```bash
+# Source Node
+source /opt/tros/humble/setup.bash
+
+# Copy the model of body tracking
+cp -r /opt/tros/${TROS_DISTRO}/lib/mono2d_body_detection/config/ .
+
+# Configure the camera interface being used, if using a USB camera, change "mipi" to "usb"
+export CAM_TYPE=mipi
+
+# Run human body tracking
+ros2 launch body_tracking body_tracking_without_gesture.launch.py
 ```
 
 After successful startup, stand in front of the robot's camera. Move your body slowly to allow the robot to recognize the entire body. You will see the robot start to follow the movement of the person. If there are multiple bodies in the field of view, the body with the largest occupied area in the current field of view will be the tracking target, continuously following the movement.
@@ -100,9 +131,16 @@ Before experiencing it, you need to meet the following basic conditions:
 
 ### Install PackagesOnce the RDK X3 is started, connect to the robot via terminal or VNC, click the "One-click Deployment" button on [NodeHub](http://it-dev.horizon.ai/nodehubDetail/167289845913411076) at the top right, and copy and run the following commands on the RDK system to install the related Nodes for human body tracking.
 
+tros foxy:
 ```bash
 sudo apt update
 sudo apt install -y tros-test-body-tracking
+```
+
+tros humble:
+```bash
+sudo apt update
+sudo apt install -y tros-humble-test-body-tracking
 ```
 
 ### Run Human Body Tracking Functionality
@@ -111,8 +149,16 @@ sudo apt install -y tros-test-body-tracking
 
 On the PC side's Ubuntu terminal, use the following commands to start Gazebo and load the robot model:
 
+foxy:
 ```bash
 source /opt/ros/foxy/setup.bash
+export TURTLEBOT3_MODEL=burger
+ros2 launch turtlebot3_gazebo empty_world.launch.py
+```
+
+humble:
+```bash
+source /opt/ros/humble/setup.bash
 export TURTLEBOT3_MODEL=burger
 ros2 launch turtlebot3_gazebo empty_world.launch.py
 ```
@@ -127,12 +173,29 @@ After successful startup, the car in the simulation environment looks as follows
 
 In the RDK system, start a terminal and use the following commands to initiate the human body tracking functionality:
 
+
+tros foxy:
 ```bash
 # Copy the model for body tracking
 cp -r /opt/tros/${TROS_DISTRO}/lib/mono2d_body_detection/config/ .
 
 # Start the Node
 source /opt/tros/setup.bash
+
+# Configure the camera interface used, if using a USB camera, change "mipi" to "usb"
+export CAM_TYPE=mipi
+
+# Run the human body tracking
+ros2 launch body_tracking body_tracking_without_gesture.launch.py
+```
+
+tros humble:
+```bash
+# Start the Node
+source /opt/tros/humble/setup.bash
+
+# Copy the model for body tracking
+cp -r /opt/tros/${TROS_DISTRO}/lib/mono2d_body_detection/config/ .
 
 # Configure the camera interface used, if using a USB camera, change "mipi" to "usb"
 export CAM_TYPE=mipi
@@ -155,6 +218,7 @@ This function supports waking up the human body tracking function through gestur
 
 To use this function, modify the following command while running the human body tracking function, with all other operations remaining the same:
 
+tros foxy:
 ```bash
 # Copy the model for body tracking
 cp -r /opt/tros/${TROS_DISTRO}/lib/mono2d_body_detection/config/ .
@@ -169,6 +233,23 @@ export CAM_TYPE=mipi
 
 # Run body tracking
 ros2 launch body_tracking body_tracking.launch.py 
+```
+
+tros humble:
+```bash
+# Start Node
+source /opt/tros/humble/setup.bash
+
+# Copy the model for body tracking
+cp -r /opt/tros/${TROS_DISTRO}/lib/mono2d_body_detection/config/ .
+cp -r /opt/tros/${TROS_DISTRO}/lib/hand_lmk_detection/config/ .
+cp -r /opt/tros/${TROS_DISTRO}/lib/hand_gesture_detection/config/ .
+
+# Configure the camera interface used, if using a USB camera, change "mipi" to "usb"
+export CAM_TYPE=mipi
+
+# Run body tracking
+ros2 launch body_tracking body_tracking.launch.py
 ```
 
 Gesture Wake-Up Instructions:
@@ -260,6 +341,12 @@ Upon detecting a human body in the field of view, calculate the angle between th
 
 This indicates that the ROS2 environment is not set in the current terminal. Execute the following command to configure the environment:
 
+tros foxy:
 ```
 source /opt/tros/setup.bash
+```
+
+tros humble:
+```
+source /opt/tros/humble/setup.bash
 ```

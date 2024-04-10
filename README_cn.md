@@ -35,9 +35,16 @@
 
 启动机器人后，通过终端或者VNC连接机器人，点击本页面右上方的“一键部署”按钮，复制如下命令在RDK的系统上运行，完成人体跟随相关Node的安装。
 
+tros foxy 版本
 ```bash
 sudo apt update
 sudo apt install -y tros-body-tracking
+```
+
+tros humble 版本
+```bash
+sudo apt update
+sudo apt install -y tros-humble-body-tracking
 ```
 
 ### 运行人体跟随功能
@@ -46,14 +53,23 @@ sudo apt install -y tros-body-tracking
 
 启动机器人，如OriginBot的启动命令如下：
 
+tros foxy 版本
 ```bash
 source /opt/tros/setup.bash
 ros2 launch originbot_base robot.launch.py 
 ```
 
+tros humble 版本
+```bash
+source /opt/tros/humble/setup.bash
+ros2 launch originbot_base robot.launch.py
+```
+
 **2.启动人体跟随**
 
 启动一个新的终端，通过如下指令启动人体跟随功能：
+
+tros foxy 版本
 ```bash
 # 拷贝人体跟随的模型
 cp -r /opt/tros/${TROS_DISTRO}/lib/mono2d_body_detection/config/ .
@@ -66,6 +82,21 @@ export CAM_TYPE=mipi
 
 # 运行人体跟随
 ros2 launch body_tracking body_tracking_without_gesture.launch.py 
+```
+
+tros numble 版本
+```bash
+#启动Node
+source /opt/tros/humble/setup.bash
+
+# 拷贝人体跟随的模型
+cp -r /opt/tros/${TROS_DISTRO}/lib/mono2d_body_detection/config/ .
+
+# 配置使用的相机接口，如使用usb相机，"mipi"改为"usb"
+export CAM_TYPE=mipi
+
+# 运行人体跟随
+ros2 launch body_tracking body_tracking_without_gesture.launch.py
 ```
 
 启动成功后，站在机器人摄像头前，需要让机器人识别到整个身体，慢慢移动身体，可以看到机器人已经开始跟随人体运动。若视野中存在多个人体，则以当前占据视野面积最大的人体作为跟踪目标，持续跟随移动。
@@ -102,9 +133,16 @@ Gazebo仿真适用于持有RDK X3但没有机器人实物的开发者体验人�
 
 启动RDK X3后，通过终端或者VNC连接机器人，点击[NodeHub](http://it-dev.horizon.ai/nodehubDetail/167289845913411076)右上方的“一键部署”按钮，复制如下命令在RDK的系统上运行，完成人体跟随相关Node的安装。
 
+tros foxy 版本
 ```bash
 sudo apt update
 sudo apt install -y tros-test-body-tracking
+```
+
+tros humble 版本
+```bash
+sudo apt update
+sudo apt install -y tros-humble-test-body-tracking
 ```
 
 ### 运行人体跟随功能
@@ -113,8 +151,16 @@ sudo apt install -y tros-test-body-tracking
 
 在PC端Ubuntu的终端中使用如下命令启动Gazebo，并加载机器人模型：
 
+foxy 版本
 ```bash
 source /opt/ros/foxy/setup.bash
+export TURTLEBOT3_MODEL=burger
+ros2 launch turtlebot3_gazebo empty_world.launch.py
+```
+
+humble 版本
+```bash
+source /opt/ros/humble/setup.bash
 export TURTLEBOT3_MODEL=burger
 ros2 launch turtlebot3_gazebo empty_world.launch.py
 ```
@@ -129,6 +175,7 @@ ros2 launch turtlebot3_gazebo empty_world.launch.py
 
 在RDK的系统中，启动终端，通过如下指令启动人体跟随功能：
 
+tros foxy 版本
 ```bash
 # 拷贝人体跟随的模型
 cp -r /opt/tros/${TROS_DISTRO}/lib/mono2d_body_detection/config/ .
@@ -141,6 +188,21 @@ export CAM_TYPE=mipi
 
 # 运行人体跟随
 ros2 launch body_tracking body_tracking_without_gesture.launch.py 
+```
+
+tros humble 版本
+```bash
+#启动Node
+source /opt/tros/humble/setup.bash
+
+# 拷贝人体跟随的模型
+cp -r /opt/tros/${TROS_DISTRO}/lib/mono2d_body_detection/config/ .
+
+# 配置使用的相机接口，如使用usb相机，"mipi"改为"usb"
+export CAM_TYPE=mipi
+
+# 运行人体跟随
+ros2 launch body_tracking body_tracking_without_gesture.launch.py
 ```
 
 启动成功后，站在机器人摄像头前，需要让机器人识别到整个身体，慢慢移动身体，可以看到机器人已经开始跟随人体运动。若视野中存在多个人体，则以当前占据视野面积最大的人体作为跟踪目标，持续跟随移动。
@@ -163,6 +225,7 @@ ros2 launch body_tracking body_tracking_without_gesture.launch.py
 
 如需使用该功能，在运行人体跟随功能时，修改为如下指令，其他操作不变：
 
+tros foxy 版本
 ```bash
 # 拷贝人体跟随的模型
 cp -r /opt/tros/${TROS_DISTRO}/lib/mono2d_body_detection/config/ .
@@ -177,6 +240,23 @@ export CAM_TYPE=mipi
 
 # 运行人体跟随
 ros2 launch body_tracking body_tracking.launch.py 
+```
+
+tros humble 版本
+```bash
+#启动Node
+source /opt/tros/humble/setup.bash
+
+# 拷贝人体跟随的模型
+cp -r /opt/tros/${TROS_DISTRO}/lib/mono2d_body_detection/config/ .
+cp -r /opt/tros/${TROS_DISTRO}/lib/hand_lmk_detection/config/ .
+cp -r /opt/tros/${TROS_DISTRO}/lib/hand_gesture_detection/config/ .
+
+# 配置使用的相机接口，如使用usb相机，"mipi"改为"usb"
+export CAM_TYPE=mipi
+
+# 运行人体跟随
+ros2 launch body_tracking body_tracking.launch.py
 ```
 
 手势唤醒说明：
@@ -270,7 +350,12 @@ Target[] disappeared_targets
 
 当前终端未设置ROS2环境，执行以下命令配置环境：
 
+tros foxy 版本
 ```
 source /opt/tros/setup.bash
 ```
 
+tros humble 版本
+```
+source /opt/tros/humble/setup.bash
+```
