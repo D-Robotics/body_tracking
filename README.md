@@ -269,7 +269,7 @@ When making a wake-up or cancellation gesture, raise your hand (hand above the s
 
 ## Topics
 
-The results of human body recognition and gesture wake-up are published through the [hobot_msgs/ai_msgs/msg/PerceptionTargets](https://github.com/HorizonRDK/hobot_msgs/blob/develop/ai_msgs/msg/Target.msg) topic. The detailed definition of this topic is as follows:
+The results of human body recognition and gesture wake-up are published through the [hobot_msgs/ai_msgs/msg/PerceptionTargets](https://github.com/D-Robotics/hobot_msgs/blob/develop/ai_msgs/msg/Target.msg) topic. The detailed definition of this topic is as follows:
 
 ```
 # Header of the message
