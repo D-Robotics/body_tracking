@@ -18,6 +18,12 @@
 | 履带智能车          | 微雪电子 | [点击跳转](https://detail.tmall.com/item.htm?abbucket=9&id=696078152772&rn=4d81bea40d392509d4a5153fb2c65a35&spm=a1z10.5-b-s.w4011-22714387486.159.12d33742lJtqRk) |
 | RDK X3 Robot        | 亚博智能 | [点击跳转](https://detail.tmall.com/item.htm?id=726857243156&scene=taobao_shop&spm=a1z10.1-b-s.w5003-22651379998.21.421044e12Yqrjm) |
 
+以下机器人均已适配RDK X5
+
+| 机器人名称          | 生产厂家 | 参考链接                                                     |
+| :------------------ | -------- | ------------------------------------------------------------ |
+| OriginBot智能机器人 | 古月居   | [点击跳转](https://www.originbot.org/)
+
 ## 使用方法
 
 ### 准备工作
@@ -111,7 +117,7 @@ ros2 launch body_tracking body_tracking_without_gesture.launch.py
 
 # Gazebo仿真
 
-Gazebo仿真适用于持有RDK X3但没有机器人实物的开发者体验人体跟随功能。
+Gazebo仿真适用于持有RDK但没有机器人实物的开发者体验人体跟随功能。
 
 ## 物料清单
 
@@ -131,7 +137,7 @@ Gazebo仿真适用于持有RDK X3但没有机器人实物的开发者体验人�
 
 ### 安装功能包
 
-启动RDK X3后，通过终端或者VNC连接机器人，点击[NodeHub](http://it-dev.horizon.ai/nodehubDetail/167289845913411076)右上方的“一键部署”按钮，复制如下命令在RDK的系统上运行，完成人体跟随相关Node的安装。
+启动RDK后，通过终端或者VNC连接机器人，点击[NodeHub](http://it-dev.horizon.ai/nodehubDetail/167289845913411076)右上方的“一键部署”按钮，复制如下命令在RDK的系统上运行，完成人体跟随相关Node的安装。
 
 tros foxy 版本
 ```bash

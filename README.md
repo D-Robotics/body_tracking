@@ -18,6 +18,11 @@ The following robots are all compatible with RDK X3
 | Tracked Smart Car    | Weixue Electronics | [Click here to jump](https://detail.tmall.com/item.htm?abbucket=9&id=696078152772&rn=4d81bea40d392509d4a5153fb2c65a35&spm=a1z10.5-b-s.w4011-22714387486.159.12d33742lJtqRk) |
 | RDK X3 Robot         | Yabo Intelligent | [Click here to jump](https://detail.tmall.com/item.htm?id=726857243156&scene=taobao_shop&spm=a1z10.1-b-s.w5003-22651379998.21.421044e12Yqrjm) |
 
+The following robots are all compatible with RDK X5.
+| Robot Name          | Manufacturer | Reference Link                                                |
+| :------------------ | ----------- | ------------------------------------------------------------- |
+| OriginBot Smart Robot | Gu Yue Ju  | [Click to jump](https://www.originbot.org/)    
+
 ## Instructions
 
 ### Preparations
@@ -111,7 +116,7 @@ Open the browser on the same networked computer, visit the IP address of the rob
 
 # Gazebo Simulation
 
-Gazebo simulation is suitable for developers who have the RDK X3 but do not have the physical robot to experience the human body tracking function.
+Gazebo simulation is suitable for developers who have the RDK but do not have the physical robot to experience the human body tracking function.
 
 ## Bill of Materials
 
@@ -129,7 +134,7 @@ Before experiencing it, you need to meet the following basic conditions:
 - The PC has completed the installation of ROS Gazebo and Turtlebot robot-related function packages.
 - Ensure that the PC being used and the RDK are in the same network.
 
-### Install PackagesOnce the RDK X3 is started, connect to the robot via terminal or VNC, click the "One-click Deployment" button on [NodeHub](http://it-dev.horizon.ai/nodehubDetail/167289845913411076) at the top right, and copy and run the following commands on the RDK system to install the related Nodes for human body tracking.
+### Install PackagesOnce the RDK is started, connect to the robot via terminal or VNC, click the "One-click Deployment" button on [NodeHub](http://it-dev.horizon.ai/nodehubDetail/167289845913411076) at the top right, and copy and run the following commands on the RDK system to install the related Nodes for human body tracking.
 
 tros foxy:
 ```bash
