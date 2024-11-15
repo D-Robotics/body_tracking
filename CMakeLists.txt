@@ -37,6 +37,7 @@ find_package(rclcpp_action REQUIRED)
 find_package(std_msgs REQUIRED)
 find_package(rosidl_default_generators REQUIRED) 
 find_package(ai_msgs REQUIRED) 
+find_package(OpenCV 4 REQUIRED)
 
 ament_export_dependencies(rosidl_default_runtime)
 
@@ -59,14 +60,11 @@ add_executable(${PROJECT_NAME}
   src/util.cpp
 )
 
-target_link_libraries(${PROJECT_NAME}
-  opencv_world
-)
-
 ament_target_dependencies(${PROJECT_NAME}
   "rclcpp"
   "rclcpp_action"
-  "ai_msgs")
+  "ai_msgs"
+  "OpenCV")
 
 install(TARGETS
   ${PROJECT_NAME}

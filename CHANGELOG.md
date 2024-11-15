@@ -1,5 +1,9 @@
 # Changelog for package body_tracking
 
+tros_2.1.1 (2024-11-15)
+------------------
+2. 依赖的OpenCV版本从3.4.5升级到4.x。
+
 tros_2.0.2 (2023-07-18)
 ------------------
 1. 更新启动脚本中的linear_velocity和angular_velocity配置参数。
